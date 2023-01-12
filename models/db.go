@@ -1,4 +1,4 @@
-package initialize
+package models
 
 import (
 	"fmt"
@@ -11,8 +11,10 @@ import (
 	"time"
 )
 
-func InitDB() {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", "User", "Password", "Host", "Port", "DBName")
+func init() {
+	globalConfig := global.LoadConfig()
+	dbConfig := globalConfig.Db
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbConfig.User, dbConfig.Password, dbConfig.LocalAddress, dbConfig.Database)
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
