@@ -8,14 +8,14 @@ import (
 )
 
 type AdminUser struct {
-	Id        int
-	Name      string
-	Password  string
-	CreateAd  time.Time
+	Id       int       `json:"id"`
+	Name     string    `json:"name"`
+	Password string    `json:"password"`
+	CreateAd LocalTime `json:"create_ad"`
 }
 
-func (u *AdminUser) Create() error  {
-	u.CreateAd = time.Now()
+func (u *AdminUser) Create() error {
+	u.CreateAd = LocalTime(time.Now())
 	tx := global.DB.Create(u)
 	if tx.RowsAffected == 0 {
 		zap.S().Info("管理员创建失败！", tx.Error)
@@ -25,18 +25,18 @@ func (u *AdminUser) Create() error  {
 	return nil
 }
 
-func AdminUserByNameAndPas(name string, password string) (adminUser AdminUser, err error)  {
+func AdminUserByNameAndPas(name string, password string) (adminUser AdminUser, err error) {
 	adminUser = AdminUser{}
-	if tx := global.DB.Where("name = ? and password = ?", name, password).First(&adminUser);tx.RowsAffected == 0 {
+	if tx := global.DB.Where("name = ? and password = ?", name, password).First(&adminUser); tx.RowsAffected == 0 {
 		return
 	}
 	return
 }
 
-func FindAdminUserById(id int) (adminUser AdminUser, err error)  {
+func FindAdminUserById(id int) (adminUser AdminUser, err error) {
 	adminUser = AdminUser{}
 	if tx := global.DB.First(&adminUser, id); tx.Error != nil {
-		return adminUser ,errors.New(tx.Error.Error())
+		return adminUser, errors.New(tx.Error.Error())
 	}
 	return adminUser, nil
 }

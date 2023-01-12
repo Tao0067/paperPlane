@@ -5,6 +5,6 @@
     "localAddress": "127.0.0.1:3306",
     "Database": "paper_plane",
     "User": "root",
-    "Password": "root"
+    "Password": "123456"
   }
 }

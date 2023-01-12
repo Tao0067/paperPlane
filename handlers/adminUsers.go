@@ -35,7 +35,7 @@ func AddAdminUser(ctx *gin.Context) {
 	})
 }
 
-func DetailAdminUserById(ctx *gin.Context)  {
+func DetailAdminUserById(ctx *gin.Context) {
 	id, ok := ctx.GetQuery("id")
 
 	if !ok {
@@ -47,18 +47,17 @@ func DetailAdminUserById(ctx *gin.Context)  {
 	}
 
 	adminUserId, _ := strconv.Atoi(id)
-	adminUser, err := models.FindAdminUserById(adminUserId);
+	adminUser, err := models.FindAdminUserById(adminUserId)
 
-	if  err != nil {
+	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  err.Error(),
 		})
 		return
 	}
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 0,
-		"data":  adminUser,
+		"data": adminUser,
 	})
 }
