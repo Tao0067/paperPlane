@@ -3,19 +3,22 @@ package models
 import (
 	"errors"
 	"go.uber.org/zap"
+	"go_xx/common"
 	global "go_xx/config"
 	"time"
 )
 
 type AdminUser struct {
-	Id       int       `json:"id"`
-	Name     string    `json:"name"`
-	Password string    `json:"password"`
-	CreateAd LocalTime `json:"create_ad"`
+	Id       uint             `json:"id"`
+	Name     string           `json:"name"`
+	Password string           `json:"password"`
+	CreateAd common.LocalTime `json:"create_ad"`
 }
 
+// Create /** 创建管理员
 func (u *AdminUser) Create() error {
-	u.CreateAd = LocalTime(time.Now())
+	u.CreateAd = common.LocalTime(time.Now())
+	u.Password = Encrypt(u.Password)
 	tx := global.DB.Create(u)
 	if tx.RowsAffected == 0 {
 		zap.S().Info("管理员创建失败！", tx.Error)
@@ -25,8 +28,9 @@ func (u *AdminUser) Create() error {
 	return nil
 }
 
-func AdminUserByNameAndPas(name string, password string) (adminUser AdminUser, err error) {
+func FindAdminUserByNameAndPas(name string, password string) (adminUser AdminUser, err error) {
 	adminUser = AdminUser{}
+	password = Encrypt(password)
 	if tx := global.DB.Where("name = ? and password = ?", name, password).First(&adminUser); tx.RowsAffected == 0 {
 		return
 	}

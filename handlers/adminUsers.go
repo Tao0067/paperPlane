@@ -8,13 +8,21 @@ import (
 )
 
 type createParams struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Name     string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func AddAdminUser(ctx *gin.Context) {
 	var param createParams
-	ctx.BindJSON(&param)
+	err := ctx.BindJSON(&param)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  err.Error(),
+		})
+		return
+	}
 
 	adminUser := models.AdminUser{
 		Name:     param.Name,
