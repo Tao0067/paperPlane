@@ -65,7 +65,7 @@ func Register(ctx *gin.Context) {
 
 	user, err := models.FindUserByNameOrEmail(registerRequest.Name, registerRequest.Email)
 	if err != nil {
-		utils.Error(ctx, err.Error())
+		utils.Error(ctx, "注册失败！")
 		return
 	}
 
@@ -81,11 +81,11 @@ func Register(ctx *gin.Context) {
 	}
 
 	if err := userModel.CreateUser(); err != nil {
-		utils.Error(ctx, err.Error())
+		utils.Error(ctx, "注册失败！")
 		return
 	}
 
-	utils.SucceedMsg(ctx, "创建成功")
+	utils.SucceedMsg(ctx, "注册成功")
 }
 
 // Login 登陆
@@ -101,13 +101,13 @@ func Login(ctx *gin.Context) {
 	userModel, err := models.FindUserByEmailAndPassword(loginRequest.Email, loginRequest.Password)
 
 	if err != nil {
-		utils.Error(ctx, err.Error())
+		utils.Error(ctx, "登陆失败！")
 		return
 	}
 
 	token, err := utils.GenerateToken(userModel.Id, "iss")
 	if err != nil {
-		utils.Error(ctx, err.Error())
+		utils.Error(ctx, "登陆失败！")
 		return
 	}
 
