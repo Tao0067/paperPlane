@@ -12,10 +12,10 @@ func Router() *gin.Engine {
 
 	v1.POST("/admin/login", http.AdminLogin)
 
-	user := v1.Group("adminUser")
+	user := v1.Group("admin")
 	{
-		user.POST("/add", http.AddAdminUser)
-		user.GET("/detail", utils.JWY(), http.DetailAdminUserById)
+		user.POST("/admin-user/add", http.AddAdminUser)
+		user.GET("/admin-user/detail", utils.JWY(), http.DetailAdminUserById)
 	}
 
 	return r

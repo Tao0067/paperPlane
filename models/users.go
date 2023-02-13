@@ -56,7 +56,7 @@ func FindUserByNameOrEmail(name string, email string) (user User, err error) {
 	return
 }
 
-func FindUserById(id uint) (user User, err error) {
+func FindUserById(id uint) (user *User, err error) {
 	if tx := global.DB.Find(&user, id); tx.Error != nil {
 		return
 	}
